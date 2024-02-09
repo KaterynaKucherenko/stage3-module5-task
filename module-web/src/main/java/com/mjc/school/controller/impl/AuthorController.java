@@ -44,7 +44,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     @Override
     @GetMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorDtoResponse readById(@CommandParam("authorId") @PathVariable Long id) {
+    public AuthorDtoResponse readById( @PathVariable Long id) {
         return authorService.readById(id);
     }
 
@@ -58,7 +58,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
 
 
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     public AuthorDtoResponse update(@CommandBody AuthorDtoRequest updateRequest) {
         return authorService.update(updateRequest);
@@ -66,9 +66,9 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
 
 
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean deleteById(@CommandParam("authorId") @PathVariable Long id) {
+    public boolean deleteById( @PathVariable Long id) {
         return authorService.deleteById(id);
     }
 

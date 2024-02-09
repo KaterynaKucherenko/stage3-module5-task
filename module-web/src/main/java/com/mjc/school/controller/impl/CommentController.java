@@ -52,14 +52,14 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
     }
 
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     public CommentDtoResponse update(CommentDtoRequest updateRequest) {
         return commentService.update(updateRequest);
     }
 
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@CommandParam("commentId") @PathVariable Long id) {
         return commentService.deleteById(id);

@@ -60,7 +60,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
 
     @CommandHandler("4")
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     public NewsDtoResponse update(@CommandBody NewsDtoRequest updateRequest) {
         return newsService.update(updateRequest);
@@ -68,7 +68,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
 
     @CommandHandler("5")
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@CommandParam("newsId") @PathVariable Long id) {
         return newsService.deleteById(id);

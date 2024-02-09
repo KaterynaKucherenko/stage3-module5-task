@@ -51,7 +51,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
 
     @CommandHandler("15")
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
     public TagDtoResponse update(TagDtoRequest updateRequest) {
         return tagsService.update(updateRequest);
@@ -59,7 +59,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
 
     @CommandHandler("16")
     @Override
-    @GetMapping(value = "/{id:\\d+}")
+    @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@CommandParam("tagId") @PathVariable Long id) {
         return tagsService.deleteById(id);

@@ -45,7 +45,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @ManyToOne
     @JoinColumn(nullable = false)
     private AuthorModel authorModel;
-    @OneToMany(mappedBy = "commentModel", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "newsModel", cascade = CascadeType.REMOVE)
     private List<CommentModel> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
