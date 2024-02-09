@@ -1,6 +1,7 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.annotation.CommandBody;
 import com.mjc.school.controller.annotation.CommandHandler;
 import com.mjc.school.controller.annotation.CommandParam;
 import com.mjc.school.service.dto.TagDtoRequest;
@@ -45,7 +46,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TagDtoResponse create(TagDtoRequest createRequest) {
+    public TagDtoResponse create(@CommandBody TagDtoRequest createRequest) {
         return tagsService.create(createRequest);
     }
 
@@ -53,7 +54,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public TagDtoResponse update(TagDtoRequest updateRequest) {
+    public TagDtoResponse update(@PathVariable Long id, @CommandBody TagDtoRequest updateRequest) {
         return tagsService.update(updateRequest);
     }
 
@@ -61,7 +62,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean deleteById(@CommandParam("tagId") @PathVariable Long id) {
-        return tagsService.deleteById(id);
+    public void deleteById(@CommandParam("tagId") @PathVariable Long id) {
+        tagsService.deleteById(id);
     }
 }

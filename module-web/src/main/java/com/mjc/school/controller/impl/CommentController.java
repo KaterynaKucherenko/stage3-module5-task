@@ -1,6 +1,7 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.annotation.CommandBody;
 import com.mjc.school.controller.annotation.CommandParam;
 
 import com.mjc.school.service.dto.CommentDtoRequest;
@@ -47,21 +48,21 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
     @Override
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDtoResponse create(CommentDtoRequest createRequest) {
+    public CommentDtoResponse create(@CommandBody CommentDtoRequest createRequest) {
         return commentService.create(createRequest);
     }
 
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDtoResponse update(CommentDtoRequest updateRequest) {
+    public CommentDtoResponse update(@PathVariable Long id, @CommandBody CommentDtoRequest updateRequest) {
         return commentService.update(updateRequest);
     }
 
     @Override
     @DeleteMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean deleteById(@CommandParam("commentId") @PathVariable Long id) {
-        return commentService.deleteById(id);
+    public void deleteById(@CommandParam("commentId") @PathVariable Long id) {
+        commentService.deleteById(id);
     }
 }
