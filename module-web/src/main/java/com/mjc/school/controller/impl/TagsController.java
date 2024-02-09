@@ -46,7 +46,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TagDtoResponse create(@CommandBody TagDtoRequest createRequest) {
+    public TagDtoResponse create(@RequestBody TagDtoRequest createRequest) {
         return tagsService.create(createRequest);
     }
 
@@ -54,7 +54,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public TagDtoResponse update(@PathVariable Long id, @CommandBody TagDtoRequest updateRequest) {
+    public TagDtoResponse update(@PathVariable Long id, @RequestBody TagDtoRequest updateRequest) {
         return tagsService.update(updateRequest);
     }
 

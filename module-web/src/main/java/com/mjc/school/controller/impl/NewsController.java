@@ -9,6 +9,8 @@ import com.mjc.school.controller.annotation.CommandParam;
 import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.dto.NewsDtoResponse;
 
+import com.mjc.school.service.dto.TagDtoRequest;
+import com.mjc.school.service.dto.TagDtoResponse;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +54,9 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
 
     @CommandHandler("3")
     @Override
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewsDtoResponse create(@CommandBody NewsDtoRequest createRequest) {
+    public NewsDtoResponse create(@RequestBody NewsDtoRequest createRequest) {
         return newsService.create(createRequest);
     }
 
@@ -62,7 +64,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public NewsDtoResponse update(@PathVariable Long id, @CommandBody NewsDtoRequest updateRequest) {
+    public NewsDtoResponse update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
         return newsService.update(updateRequest);
     }
 

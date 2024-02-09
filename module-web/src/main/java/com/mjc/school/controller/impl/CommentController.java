@@ -46,16 +46,16 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
 
 
     @Override
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDtoResponse create(@CommandBody CommentDtoRequest createRequest) {
+    public CommentDtoResponse create(@RequestBody CommentDtoRequest createRequest) {
         return commentService.create(createRequest);
     }
 
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDtoResponse update(@PathVariable Long id, @CommandBody CommentDtoRequest updateRequest) {
+    public CommentDtoResponse update(@PathVariable Long id, @RequestBody CommentDtoRequest updateRequest) {
         return commentService.update(updateRequest);
     }
 

@@ -50,9 +50,9 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
 
 
     @Override
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorDtoResponse create(@CommandBody AuthorDtoRequest createRequest) {
+    public AuthorDtoResponse create(@RequestBody AuthorDtoRequest createRequest) {
         return authorService.create(createRequest);
     }
 
@@ -60,7 +60,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorDtoResponse update(@PathVariable Long id, @CommandBody AuthorDtoRequest updateRequest) {
+    public AuthorDtoResponse update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
         return authorService.update(updateRequest);
     }
 
