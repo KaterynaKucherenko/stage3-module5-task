@@ -32,7 +32,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     }
 
     @CommandHandler("1")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     @Override
     @ResponseStatus(HttpStatus.OK)
     public List<NewsDtoResponse> readAll(

@@ -24,7 +24,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
 
     @CommandHandler("12")
     @Override
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<TagDtoResponse> readAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                         @RequestParam(value = "size", required = false, defaultValue = "5") int size,
@@ -43,7 +43,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
 
     @CommandHandler("14")
     @Override
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TagDtoResponse create(TagDtoRequest createRequest) {
         return tagsService.create(createRequest);

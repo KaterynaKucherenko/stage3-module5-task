@@ -31,7 +31,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
 
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<AuthorDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,

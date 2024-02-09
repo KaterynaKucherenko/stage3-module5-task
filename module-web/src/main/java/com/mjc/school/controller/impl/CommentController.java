@@ -26,7 +26,7 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CommentDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
