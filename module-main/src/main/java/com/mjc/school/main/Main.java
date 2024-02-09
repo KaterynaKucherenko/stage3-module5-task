@@ -1,4 +1,5 @@
 package com.mjc.school.main;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
-        Menu menu = applicationContext.getBean(Menu.class);
-        menu.start();
+        SpringApplication.run(Main.class, args);
+
     }
 }

@@ -24,26 +24,29 @@ import java.util.Objects;
 public class NewsModel implements BaseEntity<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "title")
     @Size(min = 5, max = 30)
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "content")
     @Size(min = 5, max = 255)
     private String content;
     @CreatedDate
-    @Column(nullable = false)
+    @Column(name = "createDate")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     private LocalDateTime createDate;
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(name = "lastUpdateDate")
      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     private LocalDateTime lastUpdateDate;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "authorId")
     private Long authorId;
     @ManyToOne
     @JoinColumn(nullable = false)
     private AuthorModel authorModel;
+    @OneToMany(mappedBy = "commentModel", cascade = CascadeType.REMOVE)
+    private List<CommentModel> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tags_of_news", joinColumns = @JoinColumn(name = "news_id"), inverseJoinColumns = @JoinColumn(name = "tags_id"))
@@ -150,5 +153,13 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
 
     public void setAuthorModel(AuthorModel authorModel) {
         this.authorModel = authorModel;
+    }
+
+    public List<CommentModel> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentModel> comments) {
+        this.comments = comments;
     }
 }

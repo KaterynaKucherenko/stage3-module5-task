@@ -3,6 +3,8 @@ package com.mjc.school.repository.implementation;
 import com.mjc.school.repository.BaseRepository;
 
 
+import com.mjc.school.repository.interfaces.TagRepositoryInterface;
+import com.mjc.school.repository.model.CommentModel;
 import com.mjc.school.repository.model.TagModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class TagRepository implements BaseRepository<TagModel, Long> {
+public class TagRepository implements TagRepositoryInterface{
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -25,8 +27,10 @@ public class TagRepository implements BaseRepository<TagModel, Long> {
 
 
     @Override
-    public List<TagModel> readAll() {
-        List<TagModel> result = entityManager.createQuery("SELECT a from TagModel a", TagModel.class).getResultList();
+    public List<TagModel> readAll(int page, int size, String sortBy) {
+        List<String> sort = List.of(sortBy.split(","));
+        String sorting = "SELECT a from TagModel a ORDER BY " + sort.get(0) + " " +sort.get(1);
+        List<TagModel> result = entityManager.createQuery(sorting, TagModel.class).setFirstResult((page-1)*size).setMaxResults(page*size).getResultList();
         return result;
     }
 
@@ -71,5 +75,10 @@ public class TagRepository implements BaseRepository<TagModel, Long> {
     }
 
 
+    @Override
+    public List<TagModel> readListOfTagsByNewsId(Long newsId) {
+        List<TagModel> result = entityManager.createQuery("SELECT a FROM TagModel a INNER JOIN a.news b WHERE b.id=:newsId", TagModel.class).setParameter("newsId", newsId).getResultList();
+        return result;
+    }
 }
 

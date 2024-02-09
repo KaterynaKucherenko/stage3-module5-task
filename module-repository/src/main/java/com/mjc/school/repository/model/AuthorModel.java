@@ -21,17 +21,18 @@ import java.util.Objects;
 public class AuthorModel implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     @Size(min = 3, max = 15)
     private String name;
     @CreatedDate
-    @Column(nullable = false)
+    @Column(name = "createDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(name = "lastUpdateDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastUpdateDate;
     @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE)

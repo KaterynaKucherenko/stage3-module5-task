@@ -2,8 +2,10 @@ package com.mjc.school.repository.implementation;
 
 
 import com.mjc.school.repository.BaseRepository;
+import com.mjc.school.repository.interfaces.AuthorRepositoryInterface;
 import com.mjc.school.repository.model.AuthorModel;
 
+import com.mjc.school.repository.model.TagModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("authorRepository")
-public class AuthorRepository implements BaseRepository<AuthorModel, Long> {
+public class AuthorRepository implements AuthorRepositoryInterface {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -25,8 +27,10 @@ public class AuthorRepository implements BaseRepository<AuthorModel, Long> {
 
 
     @Override
-    public List<AuthorModel> readAll() {
-        List<AuthorModel> result = entityManager.createQuery("SELECT a FROM AuthorModel a", AuthorModel.class).getResultList();
+    public List<AuthorModel> readAll(int page, int size, String sortBy) {
+        List<String> sort = List.of(sortBy.split(","));
+        String sorting = "SELECT a from AuthorModel a ORDER BY " + sort.get(0) + " " +sort.get(1);
+        List<AuthorModel> result = entityManager.createQuery(sorting, AuthorModel.class).setFirstResult((page-1)*size).setMaxResults(page*size).getResultList();
         return result;
     }
 
@@ -69,4 +73,9 @@ public class AuthorRepository implements BaseRepository<AuthorModel, Long> {
     }
 
 
+    @Override
+    public Optional<AuthorModel> readAuthorByNewsId(Long newsId) {
+        Optional<AuthorModel> result = Optional.of(entityManager.createQuery("SELECT a FROM AuthorModel a INNER JOIN a.newsModelListWithId b WHERE b.id=:newsId", AuthorModel.class).setParameter("newsId", newsId).getSingleResult());
+        return result;
+    }
 }
