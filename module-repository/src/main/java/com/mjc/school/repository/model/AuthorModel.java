@@ -1,26 +1,27 @@
 package com.mjc.school.repository.model;
 
+import javax.persistence.*;
+
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-
-import javax.persistence.*;
-import javax.xml.transform.Source;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Component
 @Table(name = "author")
+@EntityListeners(AuditingEntityListener.class)
 public class AuthorModel implements BaseEntity<Long> {
+    @javax.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -35,8 +36,8 @@ public class AuthorModel implements BaseEntity<Long> {
     @Column(name = "lastUpdateDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastUpdateDate;
-    @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE)
-    private List<NewsModel> newsModelListWithId = new ArrayList<>();
+    @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<NewsModel> newsModelListWithId;
 
     public AuthorModel() {
     }
@@ -112,4 +113,6 @@ public class AuthorModel implements BaseEntity<Long> {
     public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
         this.newsModelListWithId = newsModelListWithId;
     }
+
+
 }

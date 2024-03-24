@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +20,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "news")
-@Component
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class NewsModel implements BaseEntity<Long>, Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(nullable = false, name = "title")
@@ -40,11 +41,11 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @Column(name = "lastUpdateDate")
      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     private LocalDateTime lastUpdateDate;
-    @Column(nullable = false, name = "authorId")
-    private Long authorId;
-    @ManyToOne
-    @JoinColumn(nullable = false)
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
     private AuthorModel authorModel;
+
     @OneToMany(mappedBy = "newsModel", cascade = CascadeType.REMOVE)
     private List<CommentModel> comments = new ArrayList<>();
 
@@ -61,7 +62,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
         return title;
     }
 
-    @Required
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -70,7 +71,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
         return content;
     }
 
-    @Required
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -93,14 +94,6 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
 
     @Override
     public Long getId() {
@@ -108,7 +101,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     }
 
     @Override
-    @Required
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -126,16 +119,16 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
                 (title == newsModel.title || (title != null && title.equals(newsModel.getTitle()))) &&
                 (content == newsModel.content || (content != null && content.equals(newsModel.getContent()))) &&
                 (createDate == newsModel.createDate || (createDate != null && createDate.equals(newsModel.getCreateDate()))) &&
-                (lastUpdateDate == newsModel.lastUpdateDate || (lastUpdateDate != null && lastUpdateDate.equals(newsModel.getLastUpdateDate()))) &&
-                (authorId == newsModel.authorId || (authorId != null && authorId.equals(newsModel.getAuthorId())));
+                (lastUpdateDate == newsModel.lastUpdateDate || (lastUpdateDate != null && lastUpdateDate.equals(newsModel.getLastUpdateDate()))
+                );
     }
 
     public int hashCode() {
-        return Objects.hash(id, title, content, createDate, lastUpdateDate, authorId);
+        return Objects.hash(id, title, content, createDate, lastUpdateDate);
     }
 
     public String toString() {
-        return "news ID: " + id + ", title: " + title + ", content: " + content + ", create date: " + createDate + ", last update date: " + lastUpdateDate + ", author's ID: " + authorId;
+        return "news ID: " + id + ", title: " + title + ", content: " + content + ", create date: " + createDate + ", last update date: " + lastUpdateDate ;
     }
 
 

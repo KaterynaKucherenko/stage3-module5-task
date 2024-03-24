@@ -1,23 +1,25 @@
 package com.mjc.school.repository.model;
 
 import jakarta.validation.constraints.Size;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Component
 @Table(name = "comment")
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CommentModel implements BaseEntity <Long>{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -25,8 +27,8 @@ public class CommentModel implements BaseEntity <Long>{
     @Size(min = 5, max = 255)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name= "news_id", nullable = false)
     private NewsModel newsModel;
 
     @CreatedDate

@@ -9,7 +9,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-public record NewsDtoResponse (Long id, String title, String content, LocalDateTime createDate,  LocalDateTime lastUpdateDate, Long authorId, List<TagDtoResponse> tagList, List<CommentDtoResponse> commentList){
+public record NewsDtoResponse (
+        Long id,
+        String title,
+        String content,
+        LocalDateTime createDate,
+        LocalDateTime lastUpdateDate,
+        Long authorId,
+        List<TagDtoResponse> tagList,
+        List<CommentDtoResponse> commentList){
 
 
 }

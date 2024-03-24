@@ -17,7 +17,10 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-
+    @Mappings(value = {@Mapping(target = "created", ignore = true),
+            @Mapping(target = "modified", ignore = true),
+            @Mapping(target = "newsModel", ignore = true),
+            @Mapping(target = "id", ignore = true)})
     CommentModel DtoCommentToModel(CommentDtoRequest commentDtoRequest);
     CommentDtoResponse ModelCommentToDto(CommentModel commentModel);
     List<CommentDtoResponse> listModelToDtoList(List<CommentModel> command);
