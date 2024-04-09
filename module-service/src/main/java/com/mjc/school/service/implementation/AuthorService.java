@@ -9,6 +9,7 @@ import com.mjc.school.service.exceptions.ElementNotFoundException;
 import com.mjc.school.service.exceptions.ValidatorException;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.mapper.AuthorMapper;
+import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,14 @@ import static com.mjc.school.service.exceptions.ErrorCodes.*;
 public class AuthorService implements AuthorServiceInterface {
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
+    private CustomValidator customValidator;
 
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper, CustomValidator customValidator) {
         this.authorRepository = authorRepository;
         this.authorMapper=authorMapper;
+        this.customValidator=customValidator;
 
     }
 
@@ -49,19 +52,18 @@ public class AuthorService implements AuthorServiceInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(@Valid AuthorDtoRequest createRequest) {
-      try{
+               customValidator.validateAuthor(createRequest);
                AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
         return authorMapper.ModelAuthorToDTO(authorRepository.create(authorModel));
     }
-       catch(RuntimeException e) { throw new ValidatorException(String.format(VALIDATION.getErrorMessage()));
 
-       }}
 
 
     @Override
     @Transactional
     public AuthorDtoResponse update(Long id, @Valid AuthorDtoRequest updateRequest) {
         if(authorRepository.existById(id)){
+            customValidator.validateAuthor(updateRequest);
             AuthorModel authorModel = authorMapper.DtoAuthorToModel(updateRequest);
             authorModel.setId(id);
             return authorMapper.ModelAuthorToDTO(authorRepository.update(authorModel));

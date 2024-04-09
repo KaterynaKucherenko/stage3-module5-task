@@ -7,6 +7,7 @@ import com.mjc.school.service.dto.TagDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
 import com.mjc.school.service.interfaces.TagServiceInterface;
 import com.mjc.school.service.mapper.TagMapper;
+import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,13 @@ import static com.mjc.school.service.exceptions.ErrorCodes.NO_TAG_WITH_PROVIDED_
 public class TagsService implements TagServiceInterface {
     private final TagRepository tagsRepository;
     private final TagMapper tagMapper;
+    private CustomValidator customValidator;
 
     @Autowired
-    public TagsService(TagRepository tagsRepository, TagMapper tagMapper) {
+    public TagsService(TagRepository tagsRepository, TagMapper tagMapper, CustomValidator customValidator) {
         this.tagsRepository = tagsRepository;
         this.tagMapper = tagMapper;
+        this.customValidator = customValidator;
     }
 
     @Override
@@ -46,6 +49,7 @@ public class TagsService implements TagServiceInterface {
     @Override
     @Transactional
     public TagDtoResponse create(TagDtoRequest createRequest) {
+        customValidator.validateTag(createRequest);
         TagModel tagModel = tagMapper.DtoTagsToModel(createRequest);
         return tagMapper.ModelTagsToDto(tagsRepository.create(tagModel));
     }
@@ -54,6 +58,7 @@ public class TagsService implements TagServiceInterface {
     @Transactional
     public TagDtoResponse update(Long id, TagDtoRequest updateRequest) {
         if (tagsRepository.existById(id)) {
+            customValidator.validateTag(updateRequest);
             TagModel tagModel = tagMapper.DtoTagsToModel(updateRequest);
             tagModel.setId(id);
             return tagMapper.ModelTagsToDto(tagsRepository.update(tagModel));

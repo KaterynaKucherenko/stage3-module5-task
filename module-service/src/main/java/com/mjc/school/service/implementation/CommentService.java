@@ -12,6 +12,7 @@ import com.mjc.school.service.dto.CommentDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.mapper.CommentMapper;
+import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +29,14 @@ public class CommentService implements CommentServiceInterface {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final NewsRepository newsRepository;
+    private CustomValidator customValidator;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, NewsRepository newsRepository) {
+    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, NewsRepository newsRepository, CustomValidator customValidator) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.newsRepository=newsRepository;
+        this.customValidator = customValidator;
     }
 
     @Override
@@ -53,6 +56,7 @@ public class CommentService implements CommentServiceInterface {
     @Override
     @Transactional
     public CommentDtoResponse create(CommentDtoRequest createRequest) {
+        customValidator.validateComment(createRequest);
         CommentModel commentModel = commentMapper.DtoCommentToModel(createRequest);
         NewsModel newsModel = newsRepository.readById(createRequest.newsId()).get();
         commentModel.setNewsModel(newsModel);
@@ -65,6 +69,7 @@ public class CommentService implements CommentServiceInterface {
     @Transactional
     public CommentDtoResponse update(Long id, CommentDtoRequest updateRequest) {
         if (commentRepository.existById(id)) {
+            customValidator.validateComment(updateRequest);
             CommentModel commentModel = commentMapper.DtoCommentToModel(updateRequest);
             commentModel.setId(id);
             return commentMapper.ModelCommentToDto(commentRepository.update(commentModel));
