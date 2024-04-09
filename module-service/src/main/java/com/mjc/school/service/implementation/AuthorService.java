@@ -3,22 +3,21 @@ package com.mjc.school.service.implementation;
 
 import com.mjc.school.repository.implementation.AuthorRepository;
 import com.mjc.school.repository.model.AuthorModel;
-import com.mjc.school.service.BaseService;
 import com.mjc.school.service.dto.AuthorDtoRequest;
 import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
+import com.mjc.school.service.exceptions.ValidatorException;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.mapper.AuthorMapper;
-import com.mjc.school.service.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mjc.school.service.exceptions.ErrorCodes.NO_AUTHOR_FOR_NEWS_ID;
-import static com.mjc.school.service.exceptions.ErrorCodes.NO_AUTHOR_WITH_PROVIDED_ID;
+import static com.mjc.school.service.exceptions.ErrorCodes.*;
 
 @Service("authorService")
 @Transactional
@@ -50,9 +49,13 @@ public class AuthorService implements AuthorServiceInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(@Valid AuthorDtoRequest createRequest) {
-        AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
+      try{
+               AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
         return authorMapper.ModelAuthorToDTO(authorRepository.create(authorModel));
     }
+       catch(RuntimeException e) { throw new ValidatorException(String.format(VALIDATION.getErrorMessage()));
+
+       }}
 
 
     @Override

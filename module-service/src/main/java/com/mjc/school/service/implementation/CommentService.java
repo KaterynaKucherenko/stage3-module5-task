@@ -3,15 +3,15 @@ package com.mjc.school.service.implementation;
 
 import com.mjc.school.repository.implementation.CommentRepository;
 
+import com.mjc.school.repository.implementation.NewsRepository;
 import com.mjc.school.repository.model.CommentModel;
 
-import com.mjc.school.service.BaseService;
+import com.mjc.school.repository.model.NewsModel;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.mapper.CommentMapper;
-import com.mjc.school.service.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +25,15 @@ import static com.mjc.school.service.exceptions.ErrorCodes.*;
 @Service("commentService")
 @Transactional
 public class CommentService implements CommentServiceInterface {
-    private CommentRepository commentRepository;
-    private CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
+    private final NewsRepository newsRepository;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
+    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, NewsRepository newsRepository) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.newsRepository=newsRepository;
     }
 
     @Override
@@ -44,20 +46,24 @@ public class CommentService implements CommentServiceInterface {
     @Transactional(readOnly = true)
     public CommentDtoResponse readById(Long id) {
         Optional<CommentModel> opt = commentRepository.readById(id);
-        return opt.map(commentMapper::ModelCommentToDto).orElseThrow(() -> new ElementNotFoundException(String.format(NO_TAG_WITH_PROVIDED_ID.getErrorMessage(), id)));
+        return opt.map(commentMapper::ModelCommentToDto).orElseThrow(() -> new ElementNotFoundException(String.format(NO_COMMENT_WITH_PROVIDED_ID.getErrorMessage(), id)));
 
     }
 
     @Override
     @Transactional
-    public CommentDtoResponse create(@Valid CommentDtoRequest createRequest) {
+    public CommentDtoResponse create(CommentDtoRequest createRequest) {
         CommentModel commentModel = commentMapper.DtoCommentToModel(createRequest);
-        return commentMapper.ModelCommentToDto((commentRepository.create(commentModel)));
+        NewsModel newsModel = newsRepository.readById(createRequest.newsId()).get();
+        commentModel.setNewsModel(newsModel);
+        CommentModel createCommentModel = commentRepository.create(commentModel);
+        newsModel.addComment(createCommentModel);
+        return commentMapper.ModelCommentToDto(createCommentModel);
     }
 
     @Override
     @Transactional
-    public CommentDtoResponse update(Long id,@Valid CommentDtoRequest updateRequest) {
+    public CommentDtoResponse update(Long id, CommentDtoRequest updateRequest) {
         if (commentRepository.existById(id)) {
             CommentModel commentModel = commentMapper.DtoCommentToModel(updateRequest);
             commentModel.setId(id);

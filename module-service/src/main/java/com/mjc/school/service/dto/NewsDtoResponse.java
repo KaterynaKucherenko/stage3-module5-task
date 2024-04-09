@@ -15,7 +15,7 @@ public record NewsDtoResponse (
         String content,
         LocalDateTime createDate,
         LocalDateTime lastUpdateDate,
-        Long authorId,
+        AuthorDtoResponse authorDtoResponse,
         List<TagDtoResponse> tagList,
         List<CommentDtoResponse> commentList){
 

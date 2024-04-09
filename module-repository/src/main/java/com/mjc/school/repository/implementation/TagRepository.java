@@ -3,6 +3,7 @@ package com.mjc.school.repository.implementation;
 import com.mjc.school.repository.model.TagModel;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,10 @@ public class TagRepository extends AbstractDBRepository<TagModel, Long>{
     }
     public Optional<TagModel> readTagByName(String name){
         TypedQuery<TagModel> result =  entityManager.createQuery("SELECT a FROM TagModel a WHERE a.name LIKE:name", TagModel.class).setParameter("name", "%"+name+"%");
-        return Optional.of(result.getSingleResult());
+       try{ return Optional.of(result.getSingleResult());}
+       catch (NoResultException e){
+           return Optional.empty();
+       }
     }
 
     @Override

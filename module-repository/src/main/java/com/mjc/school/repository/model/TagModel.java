@@ -1,10 +1,5 @@
 package com.mjc.school.repository.model;
 
-import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +15,7 @@ public class TagModel implements BaseEntity<Long> {
     @Column(name = "id")
     private Long id;
     @Column(nullable = false, name = "name")
-    @Size(min = 3, max = 15)
+//    @Size(min = 3, max = 15)
     private String name;
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)

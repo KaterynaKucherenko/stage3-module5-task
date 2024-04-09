@@ -27,14 +27,14 @@ public abstract class NewsMapper {
     @Mapping(target = "createDate", ignore = true)
     @Mapping(target = "lastUpdateDate", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "authorModel", expression = "java(authorRepository.readById(newsDtoRequest.authorId()).get())")
-    @Mapping(target = "tags", expression = "java(newsDtoRequest.tags().stream().map(tagId -> tagRepository.readById(tagId).get()).toList())")
+    @Mapping(target = "authorModel", expression = "java(authorRepository.readAuthorByName(newsDtoRequest.authorName()).get())")
+    @Mapping(target = "tags", expression = "java(newsDtoRequest.tagNames().stream().map(name -> tagRepository.readTagByName(name).get()).toList())")
     @Mapping(target = "comments", expression = "java(newsDtoRequest.comments().stream().map(commentId -> commentRepository.readById(commentId).get()).toList())")
     public abstract NewsModel DTONewsToModel(NewsDtoRequest newsDtoRequest);
 
     @Mapping(source = "tags", target = "tagList")
     @Mapping(source = "comments", target = "commentList")
-    @Mapping( target = "authorId", expression = "java(newsModel.getAuthorModel().getId())")
+    @Mapping( target = "authorDtoResponse", source = "authorModel")
     public abstract NewsDtoResponse ModelNewsToDTO(NewsModel newsModel);
 
     public abstract List<NewsDtoResponse> ModelListToDtoList(List<NewsModel> newsModelList);

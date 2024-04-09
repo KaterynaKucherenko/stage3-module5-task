@@ -3,14 +3,19 @@ package com.mjc.school.service.dto;
 
 
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 
 
 public record CommentDtoRequest(
         @NotNull
-        @Size(min = 5, max = 255)
-        String content
+        @Min(5)
+        @Max(255)
+        String content,
+        @NotNull
+        Long newsId
 ) {
 
 

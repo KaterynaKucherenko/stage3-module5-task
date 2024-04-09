@@ -10,13 +10,16 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/author")
 @Api(produces = "application/json")
+@Validated
 public class AuthorController implements BaseController<AuthorDtoRequest, AuthorDtoResponse, Long> {
 
     private final AuthorServiceInterface authorService;
@@ -71,7 +74,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse create(@RequestBody AuthorDtoRequest createRequest) {
+    public AuthorDtoResponse create(@Valid @RequestBody AuthorDtoRequest createRequest) {
         return authorService.create(createRequest);
     }
 

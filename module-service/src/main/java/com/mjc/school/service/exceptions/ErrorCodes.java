@@ -1,17 +1,20 @@
 package com.mjc.school.service.exceptions;
 
 public enum ErrorCodes {
-NO_NEWS_WITH_PROVIDED_ID("01001", "News with this id: a% does not exist."),
-    NO_AUTHOR_WITH_PROVIDED_ID("01002", "Author with this id: a% does not exist."),
-    NO_TAG_WITH_PROVIDED_ID("01003", "Tag with this id: a% does not exist."),
-    NO_COMMENT_WITH_PROVIDED_ID("01004", "Comment with this id: a% does not exist."),
-    NO_AUTHOR_FOR_NEWS_ID("01005", "Author for news id: a% does not exist."),
-    NO_TAGS_FOR_NEWS_ID("01006", "Tags for news id: a% do not exist."),
-    NO_COMMENTS_FOR_NEWS_ID("01007", "Comments for news id: a% do not exist.");
+NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
+    NO_AUTHOR_WITH_PROVIDED_ID("40402", "Author with this id: %d does not exist."),
+    NO_TAG_WITH_PROVIDED_ID("40403", "Tag with this id: %d does not exist."),
+    NO_COMMENT_WITH_PROVIDED_ID("40404", "Comment with this id: %d does not exist."),
+    NO_AUTHOR_FOR_NEWS_ID("40405", "Author for news id: %d does not exist."),
+    NO_TAGS_FOR_NEWS_ID("40406", "Tags for news id: %d do not exist."),
+    NO_COMMENTS_FOR_NEWS_ID("40407", "Comments for news id: %d do not exist."),
+    VALIDATION("40001", "Validation failed: %s."),
+    UNEXPECTED_ERROR("00002", "Unexpected error happened on server");
+
 private final String errorMessage;
 
 ErrorCodes (String errorCode, String errMessage){
-    this.errorMessage="ERROR_CODE: " + errorCode + "ERROR_MESSAGE: " + errMessage;
+    this.errorMessage="errorMessage: " + errMessage+",  errorCode: " + errorCode;
 }
 public String getErrorMessage(){
     return errorMessage;

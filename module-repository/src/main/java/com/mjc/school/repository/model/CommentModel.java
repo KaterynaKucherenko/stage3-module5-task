@@ -1,15 +1,12 @@
 package com.mjc.school.repository.model;
 
-import jakarta.validation.constraints.Size;
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -24,8 +21,8 @@ public class CommentModel implements BaseEntity <Long>{
     private Long id;
 
     @Column(nullable = false, name = "content")
-    @Size(min = 5, max = 255)
-    private String content;
+//    @Size(min = 5, max = 255)
+ private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "news_id", nullable = false)

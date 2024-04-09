@@ -1,14 +1,16 @@
 package com.mjc.school.service.implementation;
 
+import com.mjc.school.repository.implementation.AuthorRepository;
 import com.mjc.school.repository.implementation.NewsRepository;
+import com.mjc.school.repository.implementation.TagRepository;
+import com.mjc.school.repository.model.AuthorModel;
 import com.mjc.school.repository.model.NewsModel;
-import com.mjc.school.service.BaseService;
+import com.mjc.school.repository.model.TagModel;
 import com.mjc.school.service.dto.NewsDtoRequest;
 import com.mjc.school.service.dto.NewsDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.mapper.NewsMapper;
-import com.mjc.school.service.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +23,17 @@ import static com.mjc.school.service.exceptions.ErrorCodes.NO_NEWS_WITH_PROVIDED
 @Service("newsService")
 @Transactional
 public class NewsService implements NewsServiceInterface {
-    private NewsRepository newsRepository;
+    private final NewsRepository newsRepository;
     private NewsMapper newsMapper;
+    private final AuthorRepository authorRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public NewsService(NewsRepository newsRepository, NewsMapper newsMapper) {
+    public NewsService(NewsRepository newsRepository, NewsMapper newsMapper, AuthorRepository authorRepository, TagRepository tagRepository) {
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;
+        this.authorRepository = authorRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -48,7 +54,9 @@ public class NewsService implements NewsServiceInterface {
 
     @Override
     @Transactional
-    public NewsDtoResponse create(@Valid NewsDtoRequest createRequest) {
+    public NewsDtoResponse create(NewsDtoRequest createRequest) {
+        createNotExistAuthor(createRequest.authorName());
+        createNotExistTags(createRequest.tagNames());
         NewsModel newsModel = newsMapper.DTONewsToModel(createRequest);
         return newsMapper.ModelNewsToDTO(newsRepository.create(newsModel));
     }
@@ -56,7 +64,7 @@ public class NewsService implements NewsServiceInterface {
 
     @Override
     @Transactional
-    public NewsDtoResponse update(Long id,@Valid NewsDtoRequest updateRequest) {
+    public NewsDtoResponse update(Long id, NewsDtoRequest updateRequest) {
         if (newsRepository.existById(id)) {
             NewsModel newsModel = newsMapper.DTONewsToModel(updateRequest);
             newsModel.setId(id);
@@ -80,6 +88,24 @@ public class NewsService implements NewsServiceInterface {
 @Override
     public List<NewsDtoResponse> readListOfNewsByParams(Optional<List<String>> tagName, Optional<List<Long>> tagId, Optional<String> authorName, Optional<String> title, Optional<String> content) {
         return newsMapper.ModelListToDtoList(newsRepository.readListOfNewsByParams(tagName, tagId, authorName, title, content));
+    }
+
+    public void createNotExistAuthor(String authorName){
+        if(authorName!=null && !authorName.equals("")){
+            if(authorRepository.readAuthorByName(authorName).isEmpty()){
+                AuthorModel authorModel = new AuthorModel();
+                authorModel.setName(authorName);
+                authorRepository.create(authorModel);
+            }
+        }
+
+    }
+    public void createNotExistTags(List<String> tagNames){
+        tagNames.stream().filter(name -> tagRepository.readTagByName(name).isEmpty()).map(name -> {
+            TagModel tagModel = new TagModel();
+            tagModel.setName(name);
+            return tagModel;
+        }).forEach(tagRepository::create);
     }
 }
 

@@ -1,14 +1,10 @@
 package com.mjc.school.repository.model;
 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,10 +24,10 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @Column(name = "id")
     private Long id;
     @Column(nullable = false, name = "title")
-    @Size(min = 5, max = 30)
-    private String title;
+//    @Size(min = 5, max = 30)
+   private String title;
     @Column(nullable = false, name = "content")
-    @Size(min = 5, max = 255)
+//    @Size(min = 5, max = 255)
     private String content;
     @CreatedDate
     @Column(name = "createDate")
@@ -154,5 +150,8 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
 
     public void setComments(List<CommentModel> comments) {
         this.comments = comments;
+    }
+    public void addComment(CommentModel commentModel){
+        comments.add(commentModel);
     }
 }

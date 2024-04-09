@@ -1,17 +1,13 @@
 package com.mjc.school.repository.model;
 
-import javax.persistence.*;
-
-import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +22,7 @@ public class AuthorModel implements BaseEntity<Long> {
     private Long id;
 
     @Column(nullable = false, name = "name")
-    @Size(min = 3, max = 15)
+//    @Size(min = 3, max = 15)
     private String name;
     @CreatedDate
     @Column(name = "createDate")

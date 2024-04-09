@@ -9,5 +9,6 @@ public record CommentDtoResponse (
     Long id,
      String content,
     LocalDateTime created,
-     LocalDateTime modified){}
+     LocalDateTime modified,
+    Long newsId){}
 
