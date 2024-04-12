@@ -31,11 +31,9 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     private String content;
     @CreatedDate
     @Column(name = "createDate")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     private LocalDateTime createDate;
     @LastModifiedDate
     @Column(name = "lastUpdateDate")
-     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     private LocalDateTime lastUpdateDate;
 
     @ManyToOne (fetch = FetchType.LAZY)

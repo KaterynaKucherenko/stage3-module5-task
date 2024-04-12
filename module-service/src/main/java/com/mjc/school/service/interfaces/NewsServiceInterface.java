@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NewsServiceInterface extends BaseService<NewsDtoRequest, NewsDtoResponse, Long> {
-    List<NewsDtoResponse> readListOfNewsByParams (Optional<List<String>> tagName, Optional<List<Long>> tagId, Optional<String> authorName, Optional<String> title, Optional<String> content);
+    List<NewsDtoResponse> readListOfNewsByParams (List<String> tagName, List<Long> tagId, String authorName, String title, String content);
 }

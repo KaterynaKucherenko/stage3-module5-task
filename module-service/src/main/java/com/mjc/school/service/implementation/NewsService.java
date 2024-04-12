@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +76,8 @@ public class NewsService implements NewsServiceInterface {
     public NewsDtoResponse update(Long id, NewsDtoRequest updateRequest) {
         if (newsRepository.existById(id)) {
             customValidator.validateNews(updateRequest);
+            createNotExistAuthor(updateRequest.authorName());
+            createNotExistTags(updateRequest.tagNames());
             NewsModel newsModel = newsMapper.DTONewsToModel(updateRequest);
             newsModel.setId(id);
             return newsMapper.ModelNewsToDTO(newsRepository.update(newsModel));
@@ -95,7 +98,8 @@ public class NewsService implements NewsServiceInterface {
     }
 
 @Override
-    public List<NewsDtoResponse> readListOfNewsByParams(Optional<List<String>> tagName, Optional<List<Long>> tagId, Optional<String> authorName, Optional<String> title, Optional<String> content) {
+    public List<NewsDtoResponse> readListOfNewsByParams(List<String> tagName, List<Long> tagId, String authorName, String title, String content) {
+
         return newsMapper.ModelListToDtoList(newsRepository.readListOfNewsByParams(tagName, tagId, authorName, title, content));
     }
 

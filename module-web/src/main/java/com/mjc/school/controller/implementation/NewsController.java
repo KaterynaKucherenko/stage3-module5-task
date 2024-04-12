@@ -8,10 +8,7 @@ import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.interfaces.TagServiceInterface;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,11 +116,13 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public List<NewsDtoResponse> readListOfNewsByParams(
-            @RequestParam(name = "tag_name", required = false) Optional<List<String>> tagName,
-            @RequestParam(name = "tag_id", required = false) Optional<List<Long>> tagId,
-            @RequestParam(name = "author_name", required = false) Optional<String> authorName,
-            @RequestParam(name = "title", required = false) Optional<String> title,
-            @RequestParam(name = "content", required = false) Optional<String> content) {
+            @RequestParam(name = "tag_name",  required = false) List<String> tagName,
+            @RequestParam(name = "tag_id",  required = false)
+            @ApiParam(type = "Long", format = "int64")
+            List<Long> tagId,
+            @RequestParam(name = "author_name",  required = false) String authorName,
+            @RequestParam(name = "title",  required = false) String title,
+            @RequestParam(name = "content",  required = false) String content) {
         return newsService.readListOfNewsByParams(tagName, tagId, authorName, title, content);
     }
 

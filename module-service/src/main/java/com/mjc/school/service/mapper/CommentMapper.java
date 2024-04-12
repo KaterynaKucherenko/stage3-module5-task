@@ -27,6 +27,8 @@ public abstract class CommentMapper {
             @Mapping(target = "id", ignore = true)})
    public abstract CommentModel DtoCommentToModel(CommentDtoRequest commentDtoRequest);
     @Mapping(target = "newsId", expression = "java(commentModel.getNewsModel().getId())")
+    @Mapping(target = "created", expression = "java(commentModel.getCreated().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
+    @Mapping(target = "modified", expression = "java(commentModel.getModified().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
     public abstract  CommentDtoResponse ModelCommentToDto(CommentModel commentModel);
     public abstract List<CommentDtoResponse> listModelToDtoList(List<CommentModel> command);
 

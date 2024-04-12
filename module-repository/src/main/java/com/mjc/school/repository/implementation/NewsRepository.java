@@ -7,37 +7,34 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository("newsRepository")
 public class NewsRepository extends AbstractDBRepository<NewsModel, Long> {
-    public List<NewsModel> readListOfNewsByParams(Optional<List<String>> tagName, Optional<List<Long>> tagId, Optional<String> authorName, Optional<String> title, Optional<String> content) {
+    public List<NewsModel> readListOfNewsByParams(List<String> tagName, List<Long> tagId, String authorName, String title, String content) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<NewsModel> query = criteriaBuilder.createQuery(NewsModel.class);
         Root<NewsModel> root = query.from(NewsModel.class);
-        if (tagName.isPresent() || tagId.isPresent()) {
+        if (tagName != null && !tagName.isEmpty()) {
             Join<NewsModel, TagModel> newsJoinTags = root.join("tags");
-            if (tagName.isPresent()) {
-                Predicate tagN = criteriaBuilder.equal(newsJoinTags.get("name"), tagName);
-                query.select(root).where(tagN);
-            }
-            if (tagId.isPresent()) {
-                Predicate tagI = criteriaBuilder.equal(newsJoinTags.get("id"), tagId);
-                query.select(root).where(tagI);
-            }
+            Predicate tagN = criteriaBuilder.equal(newsJoinTags.get("name"), tagName);
+            query.select(root).where(tagN);
         }
-        if (authorName.isPresent()) {
-            Join<NewsModel, AuthorModel> newsJoinAuthor = root.join("author");
+        if (tagId != null && !tagId.isEmpty()) {
+            Join<NewsModel, TagModel> newsJoinTags = root.join("tags");
+            Predicate tagI = criteriaBuilder.in(newsJoinTags.get("id")).value(tagId);
+            query.select(root).where(tagI);
+        }
+        if (authorName != null) {
+            Join<NewsModel, AuthorModel> newsJoinAuthor = root.join("authorModel");
             Predicate authorN = criteriaBuilder.equal(newsJoinAuthor.get("name"), authorName);
             query.select(root).where(authorN);
         }
-        if (title.isPresent()) {
+        if (title != null) {
             Predicate titlePart = criteriaBuilder.like(root.get("title"), "%" + title + "%");
             query.select(root).where(titlePart);
         }
-        if (content.isPresent()) {
+        if (content != null) {
             Predicate contentPart = criteriaBuilder.like(root.get("content"), "%" + content + "%");
             query.select(root).where(contentPart);
         }
