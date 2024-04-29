@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     public List<AuthorDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "name,asc" ) String sortBy) {
+            @RequestParam(value = "sortBy", required = false, defaultValue = "name,dsc" ) String sortBy) {
         return this.authorService.readAll(page, size, sortBy);
     }
 

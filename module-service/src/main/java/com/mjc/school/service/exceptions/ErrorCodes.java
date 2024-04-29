@@ -9,7 +9,9 @@ NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
     NO_TAGS_FOR_NEWS_ID("40406", "Tags for news id: %d do not exist."),
     NO_COMMENTS_FOR_NEWS_ID("40407", "Comments for news id: %d do not exist."),
     VALIDATION("40001", "Validation failed: %s."),
-    UNEXPECTED_ERROR("00002", "Unexpected error happened on server");
+    UNEXPECTED_ERROR("00002", "Unexpected error happened on server"),
+    NOT_UNIQUE_AUTHOR_NAME("0000", "Name of author does not unique.");
+
 
 private final String errorMessage;
 

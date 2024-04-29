@@ -45,7 +45,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     public List<NewsDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "created,dsc") String sortBy) {
+            @RequestParam(value = "sortBy", required = false, defaultValue = "createDate,dsc") String sortBy) {
         return newsService.readAll(page, size, sortBy);
     }
 

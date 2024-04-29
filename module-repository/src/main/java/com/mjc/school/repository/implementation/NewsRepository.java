@@ -44,19 +44,19 @@ public class NewsRepository extends AbstractDBRepository<NewsModel, Long> {
 
     @Override
     void update(NewsModel prevState, NewsModel nextState) {
-        if (nextState.getTitle() != null && !nextState.getTitle().isBlank()) {
+//        if (nextState.getTitle() != null && !nextState.getTitle().isBlank()) {
             prevState.setTitle(nextState.getTitle());
-        }
-        if (nextState.getContent() != null && !nextState.getContent().isBlank()) {
+
+//        if (nextState.getContent() != null && !nextState.getContent().isBlank()) {
             prevState.setContent(nextState.getContent());
-        }
+
         AuthorModel authorModel = nextState.getAuthorModel();
-        if (authorModel != null && !authorModel.getName().isBlank()) {
+//        if (authorModel != null && !authorModel.getName().equals(prevState.getAuthorModel().getName())) {
             prevState.setAuthorModel(nextState.getAuthorModel());
-        }
+
         List<TagModel> tagModels = nextState.getTags();
-        if (tagModels != null && !tagModels.isEmpty()) {
+//        if (tagModels != null && !tagModels.equals(prevState.getTags())) {
             prevState.setTags(nextState.getTags());
-        }
+
     }
 }

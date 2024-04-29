@@ -14,8 +14,7 @@ public class TagModel implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(nullable = false, name = "name")
-//    @Size(min = 3, max = 15)
+    @Column(nullable = false, name = "name" , unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)

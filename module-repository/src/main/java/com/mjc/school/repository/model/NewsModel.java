@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,11 +22,9 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(nullable = false, name = "title")
-//    @Size(min = 5, max = 30)
+    @Column(nullable = false, name = "title" , unique = true)
    private String title;
     @Column(nullable = false, name = "content")
-//    @Size(min = 5, max = 255)
     private String content;
     @CreatedDate
     @Column(name = "createDate")

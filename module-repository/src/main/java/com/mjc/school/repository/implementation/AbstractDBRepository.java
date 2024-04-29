@@ -31,6 +31,9 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
 
     @Override
     public List<T> readAll(int page, int size, String sortBy) {
+        if (page < 0 || size <= 0 || sortBy == null || sortBy.isEmpty()) {
+            throw new IllegalArgumentException("Invalid parameters");
+        }
         String[] sort = sortBy.split(",");
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
@@ -45,7 +48,10 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
             ordered = select.orderBy(criteriaBuilder.desc(root.get(sort[0])));
         }
         TypedQuery<T> result = entityManager.createQuery(ordered).setFirstResult(page * size).setMaxResults(size);
-        return result.getResultList();
+        try { return result.getResultList();}
+        catch (PersistenceException e){ throw new PersistenceException("Error reading entities from database", e);
+
+        }
     }
 
 
@@ -63,12 +69,10 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
 
     @Override
     public T update(T entity) {
-        return readById(entity.getId()).map(a -> {
-            update(a, entity);
-            T updated = entityManager.merge(a);
+        T existingEntity = entityManager.find(entityClass, entity.getId());
+        update(existingEntity,entity );
             entityManager.flush();
-            return updated;
-        }).orElse(null);
+          return existingEntity;
     }
 
     @Override

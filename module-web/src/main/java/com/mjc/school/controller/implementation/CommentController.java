@@ -39,7 +39,7 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
     public List<CommentDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "name,asc") String sortBy) {
+            @RequestParam(value = "sortBy", required = false, defaultValue = "created,dsc") String sortBy) {
         return this.commentService.readAll(page, size, sortBy);
 
     }

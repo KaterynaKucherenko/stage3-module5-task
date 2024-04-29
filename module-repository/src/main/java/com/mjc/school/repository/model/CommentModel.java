@@ -21,7 +21,6 @@ public class CommentModel implements BaseEntity <Long>{
     private Long id;
 
     @Column(nullable = false, name = "content")
-//    @Size(min = 5, max = 255)
  private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

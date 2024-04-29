@@ -10,6 +10,7 @@ import com.mjc.school.service.exceptions.ValidatorException;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.mapper.AuthorMapper;
 import com.mjc.school.service.validation.CustomValidator;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,10 +53,14 @@ public class AuthorService implements AuthorServiceInterface {
     @Override
     @Transactional
     public AuthorDtoResponse create(@Valid AuthorDtoRequest createRequest) {
-               customValidator.validateAuthor(createRequest);
-               AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
+        customValidator.validateAuthor(createRequest);
+
+        AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
         return authorMapper.ModelAuthorToDTO(authorRepository.create(authorModel));
+
     }
+
+
 
 
 

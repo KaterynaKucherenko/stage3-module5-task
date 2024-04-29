@@ -18,15 +18,12 @@ public record NewsDtoRequest(
         String content,
         @NotNull
         String authorName,
-        List<String> tagNames,
-        List<Long> comments) {
+        List<String> tagNames) {
     public NewsDtoRequest {
         if (tagNames == null) {
             tagNames = new ArrayList<>();
         }
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
+
     }
 
 

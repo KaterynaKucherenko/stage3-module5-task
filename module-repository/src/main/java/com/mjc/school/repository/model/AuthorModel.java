@@ -1,5 +1,7 @@
 package com.mjc.school.repository.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -8,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,19 +24,28 @@ public class AuthorModel implements BaseEntity<Long> {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, name = "name")
-//    @Size(min = 3, max = 15)
+    @Column(nullable = false, name = "name", unique = true)
     private String name;
+    @Setter
+    @Getter
     @CreatedDate
     @Column(name = "createDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
+    @Getter
+    @Setter
     @LastModifiedDate
     @Column(name = "lastUpdateDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastUpdateDate;
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<NewsModel> newsModelListWithId;
+    private List<NewsModel> newsModelListWithId = new ArrayList<>();
+    @Getter
+    @Transient
+    private int newsCount;
+
 
     public AuthorModel() {
     }
@@ -53,32 +65,36 @@ public class AuthorModel implements BaseEntity<Long> {
     @Override
     public void setId(Long id) {
         this.id = id;
-
     }
-
-    public String getName() {
+public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
+}
+public void setName(String name) {
         this.name = name;
-    }
-
-    public LocalDateTime getCreateDate() {
+}
+public LocalDateTime getCreateDate() {
         return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
+}
+public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
-    }
-
-    public LocalDateTime getLastUpdateDate() {
+}
+public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
-    }
-
-    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+}
+public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
+}
+public List<NewsModel> getNewsModelListWithId() {
+        return newsModelListWithId;
+}
+public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
+        this.newsModelListWithId = newsModelListWithId;
+    this.newsCount = newsModelListWithId.size();
+
+}
+public int getNewsCount() {
+        return newsCount;
+}
 
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -100,14 +116,6 @@ public class AuthorModel implements BaseEntity<Long> {
 
     public String toString() {
         return "Author's ID: " + id + ", author's name: " + name + ", create date: " + createDate + ", last update date: " + lastUpdateDate;
-    }
-
-    public List<NewsModel> getNewsModelListWithId() {
-        return newsModelListWithId;
-    }
-
-    public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
-        this.newsModelListWithId = newsModelListWithId;
     }
 
 
