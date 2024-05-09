@@ -2,6 +2,7 @@ package com.mjc.school.controller.implementation;
 
 import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.annotation.CommandParam;
+import com.mjc.school.controller.hateoas.LinkHelper;
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
 import com.mjc.school.service.interfaces.TagServiceInterface;
@@ -10,14 +11,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/tag")
-@Api(produces = "application/json")
+@RequestMapping(value = "api/v1/tag", produces ="application/json")
+@Api( value = "Tags", description = "Operations for creating, updating, retrieving and deleting tag in the application")
 public class TagsController implements BaseController<TagDtoRequest, TagDtoResponse, Long> {
     private TagServiceInterface tagsService;
 
@@ -53,8 +56,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public TagDtoResponse readById(@CommandParam("tagId") @PathVariable Long id) {
-        return tagsService.readById(id);
+    public EntityModel<TagDtoResponse> readById(@CommandParam("tagId") @PathVariable Long id) {
+       EntityModel<TagDtoResponse> model = EntityModel.of(tagsService.readById(id));
+        LinkHelper.addLinkToTags(model);
+        return model;
     }
 
     @Override
@@ -67,8 +72,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public TagDtoResponse create(@RequestBody TagDtoRequest createRequest) {
-        return tagsService.create(createRequest);
+    public EntityModel<TagDtoResponse> create(@RequestBody TagDtoRequest createRequest) {
+        EntityModel<TagDtoResponse> model = EntityModel.of(tagsService.create(createRequest));
+        LinkHelper.addLinkToTags(model);
+        return model;
     }
 
     @Override
@@ -81,8 +88,10 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public TagDtoResponse update(@PathVariable Long id, @RequestBody TagDtoRequest updateRequest) {
-        return tagsService.update(id,updateRequest);
+    public EntityModel<TagDtoResponse> update(@PathVariable Long id, @RequestBody TagDtoRequest updateRequest) {
+        EntityModel<TagDtoResponse> model = EntityModel.of(tagsService.update(id, updateRequest));
+        LinkHelper.addLinkToTags(model);
+        return model;
     }
 
     @Override

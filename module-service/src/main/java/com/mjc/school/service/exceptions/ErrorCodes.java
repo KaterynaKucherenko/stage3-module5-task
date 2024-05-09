@@ -8,6 +8,7 @@ NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
     NO_AUTHOR_FOR_NEWS_ID("40405", "Author for news id: %d does not exist."),
     NO_TAGS_FOR_NEWS_ID("40406", "Tags for news id: %d do not exist."),
     NO_COMMENTS_FOR_NEWS_ID("40407", "Comments for news id: %d do not exist."),
+    INVALID_VALUE_OF_SORTING("40408", "Value of the sortBy is wrong"),
     VALIDATION("40001", "Validation failed: %s."),
     UNEXPECTED_ERROR("00002", "Unexpected error happened on server"),
     NOT_UNIQUE_AUTHOR_NAME("0000", "Name of author does not unique.");

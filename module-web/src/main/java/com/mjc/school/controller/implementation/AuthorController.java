@@ -1,6 +1,7 @@
 package com.mjc.school.controller.implementation;
 
 import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.hateoas.LinkHelper;
 import com.mjc.school.service.dto.AuthorDtoRequest;
 import com.mjc.school.service.dto.AuthorDtoResponse;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/author")
-@Api(produces = "application/json")
+@RequestMapping(value = "api/v1/author", produces = "application/json")
+@Api(value = "Authors", description = "Operations for creating, updating, retrieving and deleting author in the application")
 @Validated
 public class AuthorController implements BaseController<AuthorDtoRequest, AuthorDtoResponse, Long> {
 
@@ -60,8 +62,10 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse readById(@PathVariable Long id) {
-        return authorService.readById(id);
+    public EntityModel<AuthorDtoResponse> readById(@PathVariable Long id) {
+        EntityModel<AuthorDtoResponse> model = EntityModel.of(authorService.readById(id));
+        LinkHelper.addLinkToAuthors(model);
+        return model;
     }
 
 
@@ -75,8 +79,11 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse create(@Valid @RequestBody AuthorDtoRequest createRequest) {
-        return authorService.create(createRequest);
+    public EntityModel<AuthorDtoResponse> create(@Valid @RequestBody AuthorDtoRequest createRequest) {
+        EntityModel<AuthorDtoResponse> model = EntityModel.of(authorService.create(createRequest));
+        LinkHelper.addLinkToAuthors(model);
+        return model;
+
     }
 
 
@@ -90,8 +97,10 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
-        return authorService.update(id, updateRequest);
+    public EntityModel<AuthorDtoResponse> update(@PathVariable Long id, @RequestBody AuthorDtoRequest updateRequest) {
+        EntityModel<AuthorDtoResponse> model = EntityModel.of(authorService.update(id, updateRequest));
+        LinkHelper.addLinkToAuthors(model);
+        return model;
     }
 
 

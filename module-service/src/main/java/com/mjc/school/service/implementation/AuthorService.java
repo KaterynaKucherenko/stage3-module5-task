@@ -12,10 +12,12 @@ import com.mjc.school.service.mapper.AuthorMapper;
 import com.mjc.school.service.validation.CustomValidator;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +42,14 @@ public class AuthorService implements AuthorServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public List<AuthorDtoResponse> readAll(int page, int size, String sortBy) {
-        return authorMapper.ModelListToDtoList(authorRepository.readAll(page, size, sortBy));
+try {
+        return authorMapper.ModelListToDtoList(authorRepository.readAll(page, size, sortBy));}
+catch (InvalidDataAccessApiUsageException e) {
+    throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
+}
     }
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -54,8 +62,10 @@ public class AuthorService implements AuthorServiceInterface {
     @Transactional
     public AuthorDtoResponse create(@Valid AuthorDtoRequest createRequest) {
         customValidator.validateAuthor(createRequest);
-
+        if(authorRepository.readAuthorByName(createRequest.name()).isPresent()) {
+            throw new ValidatorException("Name of author must be unique");}
         AuthorModel authorModel = authorMapper.DtoAuthorToModel(createRequest);
+
         return authorMapper.ModelAuthorToDTO(authorRepository.create(authorModel));
 
     }
@@ -69,6 +79,8 @@ public class AuthorService implements AuthorServiceInterface {
     public AuthorDtoResponse update(Long id, @Valid AuthorDtoRequest updateRequest) {
         if(authorRepository.existById(id)){
             customValidator.validateAuthor(updateRequest);
+            if(authorRepository.readAuthorByName(updateRequest.name()).isPresent()) {
+                throw new ValidatorException("Name of author must be unique");}
             AuthorModel authorModel = authorMapper.DtoAuthorToModel(updateRequest);
             authorModel.setId(id);
             return authorMapper.ModelAuthorToDTO(authorRepository.update(authorModel));

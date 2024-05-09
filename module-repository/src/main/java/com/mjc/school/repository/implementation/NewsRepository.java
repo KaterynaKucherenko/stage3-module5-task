@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Optional;
 
 @Repository("newsRepository")
 public class NewsRepository extends AbstractDBRepository<NewsModel, Long> {
@@ -44,19 +45,21 @@ public class NewsRepository extends AbstractDBRepository<NewsModel, Long> {
 
     @Override
     void update(NewsModel prevState, NewsModel nextState) {
-//        if (nextState.getTitle() != null && !nextState.getTitle().isBlank()) {
             prevState.setTitle(nextState.getTitle());
 
-//        if (nextState.getContent() != null && !nextState.getContent().isBlank()) {
             prevState.setContent(nextState.getContent());
 
         AuthorModel authorModel = nextState.getAuthorModel();
-//        if (authorModel != null && !authorModel.getName().equals(prevState.getAuthorModel().getName())) {
             prevState.setAuthorModel(nextState.getAuthorModel());
 
         List<TagModel> tagModels = nextState.getTags();
-//        if (tagModels != null && !tagModels.equals(prevState.getTags())) {
             prevState.setTags(nextState.getTags());
 
     }
-}
+    public Optional<NewsModel> readNewsByTitle(String title){
+        TypedQuery<NewsModel> typedQuery = entityManager.createQuery("SELECT a FROM NewsModel a WHERE a.title LIKE:title", NewsModel.class).setParameter("title", title  );
+        try{ return Optional.of(typedQuery.getSingleResult());}
+        catch (Exception e){
+            return Optional.empty();
+        }
+    }}

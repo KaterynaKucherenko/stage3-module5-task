@@ -70,7 +70,7 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
     @Override
     public T update(T entity) {
         T existingEntity = entityManager.find(entityClass, entity.getId());
-        update(existingEntity,entity );
+        update(existingEntity,entity);
             entityManager.flush();
           return existingEntity;
     }

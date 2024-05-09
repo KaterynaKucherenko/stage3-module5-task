@@ -42,9 +42,6 @@ public class AuthorModel implements BaseEntity<Long> {
     @Getter
     @OneToMany(mappedBy = "authorModel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<NewsModel> newsModelListWithId = new ArrayList<>();
-    @Getter
-    @Transient
-    private int newsCount;
 
 
     public AuthorModel() {
@@ -89,12 +86,10 @@ public List<NewsModel> getNewsModelListWithId() {
 }
 public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
         this.newsModelListWithId = newsModelListWithId;
-    this.newsCount = newsModelListWithId.size();
+
 
 }
-public int getNewsCount() {
-        return newsCount;
-}
+
 
     public boolean equals(Object obj) {
         if (obj == this) {

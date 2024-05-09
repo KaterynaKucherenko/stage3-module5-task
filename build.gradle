@@ -25,6 +25,7 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-web:2.7.7'
         testImplementation "org.springframework:spring-test:$springVersion"
         implementation 'com.h2database:h2:2.1.214'
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.7.7'
 
         implementation 'javax.xml.bind:jaxb-api:2.3.1'
         implementation 'javax.validation:validation-api:2.0.1.Final'
@@ -41,6 +42,9 @@ subprojects {
 
         annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
+        testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
+        testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.6'
+
 
 
 

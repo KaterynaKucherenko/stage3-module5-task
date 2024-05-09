@@ -3,21 +3,25 @@ package com.mjc.school.controller.implementation;
 
 import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.annotation.CommandParam;
+import com.mjc.school.controller.hateoas.LinkHelper;
 import com.mjc.school.service.dto.*;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.interfaces.TagServiceInterface;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/news")
-@Api(produces = "application/json")
+@RequestMapping(value = "api/v1/news", produces = "application/json")
+@Api(value = "News", description = "Operations for creating, updating, retrieving and deleting news in the application")
 public class NewsController implements BaseController<NewsDtoRequest, NewsDtoResponse, Long> {
 
     private final NewsServiceInterface newsService;
@@ -59,8 +63,10 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public NewsDtoResponse readById(@CommandParam("newsId") @PathVariable Long id) {
-        return newsService.readById(id);
+    public EntityModel<NewsDtoResponse> readById(@CommandParam("newsId") @PathVariable Long id) {
+        EntityModel<NewsDtoResponse> model = EntityModel.of(newsService.readById(id));
+        LinkHelper.addLinkToNews(model);
+        return model;
     }
 
     @Override
@@ -73,8 +79,10 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public NewsDtoResponse create(@RequestBody NewsDtoRequest createRequest) {
-        return newsService.create(createRequest);
+    public EntityModel<NewsDtoResponse> create(@RequestBody NewsDtoRequest createRequest) {
+        EntityModel<NewsDtoResponse> model = EntityModel.of(newsService.create(createRequest));
+        LinkHelper.addLinkToNews(model);
+        return model;
     }
 
     @Override
@@ -87,8 +95,10 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public NewsDtoResponse update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
-        return newsService.update(id,updateRequest);
+    public EntityModel<NewsDtoResponse> update(@PathVariable Long id, @RequestBody NewsDtoRequest updateRequest) {
+        EntityModel<NewsDtoResponse> model = EntityModel.of(newsService.update(id, updateRequest));
+        LinkHelper.addLinkToNews(model);
+        return model;
     }
 
     @Override
@@ -135,9 +145,13 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public List<TagDtoResponse> readListOfTagsByNewsId(@PathVariable  Long newsId) {
-        return tagService.readListOfTagsByNewsId(newsId);
+    public List<EntityModel<TagDtoResponse>> readListOfTagsByNewsId(@PathVariable  Long newsId) {
+        List<EntityModel<TagDtoResponse>> tagModels = tagService.readListOfTagsByNewsId(newsId).stream().map(EntityModel::of).toList();
+       tagModels.forEach(LinkHelper::addLinkToTags);
+        return tagModels;
+
     }
+
 
     @GetMapping(value = "/{newsId:\\d+}/author")
     @ResponseStatus(HttpStatus.OK)
@@ -148,8 +162,10 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public AuthorDtoResponse readAuthorByNewsId(@PathVariable Long newsId) {
-        return authorService.readAuthorByNewsId(newsId);
+    public EntityModel<AuthorDtoResponse> readAuthorByNewsId(@PathVariable Long newsId) {
+        EntityModel<AuthorDtoResponse> model = EntityModel.of(authorService.readAuthorByNewsId(newsId));
+        LinkHelper.addLinkToAuthors(model);
+        return model;
     }
     @GetMapping(value = "/{newsId:\\d+}/comment")
     @ResponseStatus(HttpStatus.OK)
@@ -160,8 +176,10 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public List<CommentDtoResponse> readListOfCommentsByNewsId(@PathVariable Long newsId) {
-        return commentService.readListOfCommentsByNewsId(newsId);
+    public List<EntityModel<CommentDtoResponse>> readListOfCommentsByNewsId(@PathVariable Long newsId) {
+        List<EntityModel<CommentDtoResponse>> commentModels = commentService.readListOfCommentsByNewsId(newsId).stream().map(EntityModel::of).toList();
+        commentModels.forEach(LinkHelper::addLinkToComments);
+        return commentModels;
     }
 
 }

@@ -15,6 +15,7 @@ import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.mapper.NewsMapper;
 import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mjc.school.service.exceptions.ErrorCodes.NO_NEWS_WITH_PROVIDED_ID;
-import static com.mjc.school.service.exceptions.ErrorCodes.VALIDATION;
+import static com.mjc.school.service.exceptions.ErrorCodes.*;
 import static com.mjc.school.service.validation.CustomValidator.*;
 
 @Service("newsService")
@@ -47,8 +47,11 @@ public class NewsService implements NewsServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public List<NewsDtoResponse> readAll(int page, int size, String sortBy) {
-        return newsMapper.ModelListToDtoList((newsRepository.readAll(page, size, sortBy)));
+        try{ return newsMapper.ModelListToDtoList((newsRepository.readAll(page, size, sortBy)));
     }
+        catch (InvalidDataAccessApiUsageException e) {
+            throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
+        }}
 
 
     @Override
@@ -66,6 +69,8 @@ public class NewsService implements NewsServiceInterface {
         customValidator.validateNews(createRequest);
         createNotExistAuthor(createRequest.authorName());
         createNotExistTags(createRequest.tagNames());
+        if(newsRepository.readNewsByTitle(createRequest.title()).isPresent()) {
+            throw new ValidatorException("Title of news must be unique");}
         NewsModel newsModel = newsMapper.DTONewsToModel(createRequest);
         return newsMapper.ModelNewsToDTO(newsRepository.create(newsModel));
     }
@@ -78,6 +83,8 @@ public class NewsService implements NewsServiceInterface {
             customValidator.validateNews(updateRequest);
             createNotExistAuthor(updateRequest.authorName());
             createNotExistTags(updateRequest.tagNames());
+            if(newsRepository.readNewsByTitle(updateRequest.title()).isPresent()) {
+                throw new ValidatorException("Title of news must be unique");}
             NewsModel newsModel = newsMapper.DTONewsToModel(updateRequest);
             newsModel.setId(id);
             return newsMapper.ModelNewsToDTO(newsRepository.update(newsModel));

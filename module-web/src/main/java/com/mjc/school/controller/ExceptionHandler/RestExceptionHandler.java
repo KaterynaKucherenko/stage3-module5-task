@@ -8,16 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
+
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleRuntimeException(RuntimeException exception, WebRequest request) {
-
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<Object> handleRuntimeException(RuntimeException exception, WebRequest request) {
+//
+//        return handleExceptionInternal(exception, exception.getClass().getName(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+//    }
 
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -34,13 +34,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         }
         return handleExceptionInternal(exception, "Value is not unique", new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, WebRequest request) {
-        return handleExceptionInternal(ex, "The requested resource could not be found.", new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-
     }
-}
 
 
 

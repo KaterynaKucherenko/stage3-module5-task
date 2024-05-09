@@ -2,6 +2,7 @@ package com.mjc.school.controller.implementation;
 
 import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.annotation.CommandParam;
+import com.mjc.school.controller.hateoas.LinkHelper;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
@@ -10,14 +11,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/comment")
-@Api(produces = "application/json")
+@RequestMapping(value = "api/v1/comment", produces = "application/json")
+@Api(value = "Comments", description = "Operations for creating, updating, retrieving and deleting comment in the application")
 public class CommentController implements BaseController<CommentDtoRequest, CommentDtoResponse, Long> {
     private final CommentServiceInterface commentService;
 
@@ -54,8 +56,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public CommentDtoResponse readById(@CommandParam("commentId") @PathVariable Long id) {
-        return commentService.readById(id);
+    public EntityModel<CommentDtoResponse> readById(@CommandParam("commentId") @PathVariable Long id) {
+        EntityModel<CommentDtoResponse> model = EntityModel.of(commentService.readById(id));
+        LinkHelper.addLinkToComments(model);
+        return model;
     }
 
 
@@ -69,8 +73,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public CommentDtoResponse create(@RequestBody CommentDtoRequest createRequest) {
-        return commentService.create(createRequest);
+    public EntityModel<CommentDtoResponse> create(@RequestBody CommentDtoRequest createRequest) {
+        EntityModel<CommentDtoResponse> model = EntityModel.of(commentService.create(createRequest));
+        LinkHelper.addLinkToComments(model);
+        return model;
     }
 
     @Override
@@ -83,8 +89,10 @@ public class CommentController implements BaseController<CommentDtoRequest, Comm
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public CommentDtoResponse update(@PathVariable Long id, @RequestBody CommentDtoRequest updateRequest) {
-        return commentService.update(id, updateRequest);
+    public EntityModel<CommentDtoResponse> update(@PathVariable Long id, @RequestBody CommentDtoRequest updateRequest) {
+        EntityModel<CommentDtoResponse> model = EntityModel.of(commentService.update(id, updateRequest));
+        LinkHelper.addLinkToComments(model);
+        return model;
     }
 
     @Override

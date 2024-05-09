@@ -10,10 +10,12 @@ import com.mjc.school.repository.model.NewsModel;
 import com.mjc.school.service.dto.CommentDtoRequest;
 import com.mjc.school.service.dto.CommentDtoResponse;
 import com.mjc.school.service.exceptions.ElementNotFoundException;
+import com.mjc.school.service.exceptions.ValidatorException;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.mapper.CommentMapper;
 import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +44,11 @@ public class CommentService implements CommentServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public List<CommentDtoResponse> readAll(int page, int size, String sortBy) {
-        return commentMapper.listModelToDtoList(commentRepository.readAll(page, size, sortBy));
+      try{  return commentMapper.listModelToDtoList(commentRepository.readAll(page, size, sortBy));
     }
+      catch (InvalidDataAccessApiUsageException e) {
+          throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
+      }}
 
     @Override
     @Transactional(readOnly = true)

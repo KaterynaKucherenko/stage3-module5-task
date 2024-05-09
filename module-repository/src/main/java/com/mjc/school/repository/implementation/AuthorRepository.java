@@ -23,7 +23,15 @@ import java.util.Optional;
 
 @Repository("authorRepository")
 public class AuthorRepository extends AbstractDBRepository <AuthorModel, Long>  {
+@Override
+public List<AuthorModel> readAll(int page, int size, String sortBy) {
+    if (sortBy.split(",")[0].equals("newsCount")) {
+        String str = "SELECT a FROM AuthorModel a JOIN a.newsModelListWithId b GROUP BY a ORDER BY COUNT(b)" + sortBy.split(",")[1];
+        return entityManager.createQuery(str).getResultList();
+    }
+    return super.readAll(page, size, sortBy);
 
+}
 
     @Override
     void update(AuthorModel prevState, AuthorModel nextState) {
