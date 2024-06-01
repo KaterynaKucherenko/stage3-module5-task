@@ -15,7 +15,7 @@ public class CommentRepository extends AbstractDBRepository<CommentModel, Long> 
 
     @Override
     void update(CommentModel prevState, CommentModel nextState) {
-        if(nextState.getContent()!=null && !nextState.getContent().isBlank()){
+        if (nextState.getContent() != null && !nextState.getContent().isBlank()) {
             prevState.setContent(nextState.getContent());
         }
 

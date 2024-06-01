@@ -13,12 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<Object> handleRuntimeException(RuntimeException exception, WebRequest request) {
-//
-//        return handleExceptionInternal(exception, exception.getClass().getName(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-//    }
-
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(DataIntegrityViolationException exception, WebRequest request) {
@@ -34,7 +28,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         }
         return handleExceptionInternal(exception, "Value is not unique", new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-    }
+}
 
 
 

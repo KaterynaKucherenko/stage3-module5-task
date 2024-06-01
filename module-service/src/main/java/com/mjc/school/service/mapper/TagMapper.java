@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TagMapper {
-    @Mappings(value = {@Mapping(target="news",ignore=true),
+    @Mappings(value = {@Mapping(target = "news", ignore = true),
             @Mapping(target = "id", ignore = true)})
     TagModel DtoTagsToModel(TagDtoRequest tagDtoRequest);
 

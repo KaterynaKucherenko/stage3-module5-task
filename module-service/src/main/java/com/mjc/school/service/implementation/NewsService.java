@@ -19,7 +19,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,18 +46,19 @@ public class NewsService implements NewsServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public List<NewsDtoResponse> readAll(int page, int size, String sortBy) {
-        try{ return newsMapper.ModelListToDtoList((newsRepository.readAll(page, size, sortBy)));
-    }
-        catch (InvalidDataAccessApiUsageException e) {
+        try {
+            return newsMapper.ModelListToDtoList((newsRepository.readAll(page, size, sortBy)));
+        } catch (InvalidDataAccessApiUsageException e) {
             throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
-        }}
+        }
+    }
 
 
     @Override
     @Transactional(readOnly = true)
     public NewsDtoResponse readById(Long id) {
         Optional<NewsModel> opt = newsRepository.readById(id);
-        return opt.map(newsMapper::ModelNewsToDTO).orElseThrow(()-> new ElementNotFoundException(String.format(NO_NEWS_WITH_PROVIDED_ID.getErrorMessage(), id)));
+        return opt.map(newsMapper::ModelNewsToDTO).orElseThrow(() -> new ElementNotFoundException(String.format(NO_NEWS_WITH_PROVIDED_ID.getErrorMessage(), id)));
 
     }
 
@@ -69,8 +69,9 @@ public class NewsService implements NewsServiceInterface {
         customValidator.validateNews(createRequest);
         createNotExistAuthor(createRequest.authorName());
         createNotExistTags(createRequest.tagNames());
-        if(newsRepository.readNewsByTitle(createRequest.title()).isPresent()) {
-            throw new ValidatorException("Title of news must be unique");}
+        if (newsRepository.readNewsByTitle(createRequest.title()).isPresent()) {
+            throw new ValidatorException("Title of news must be unique");
+        }
         NewsModel newsModel = newsMapper.DTONewsToModel(createRequest);
         return newsMapper.ModelNewsToDTO(newsRepository.create(newsModel));
     }
@@ -83,8 +84,9 @@ public class NewsService implements NewsServiceInterface {
             customValidator.validateNews(updateRequest);
             createNotExistAuthor(updateRequest.authorName());
             createNotExistTags(updateRequest.tagNames());
-            if(newsRepository.readNewsByTitle(updateRequest.title()).isPresent()) {
-                throw new ValidatorException("Title of news must be unique");}
+            if (newsRepository.readNewsByTitle(updateRequest.title()).isPresent()) {
+                throw new ValidatorException("Title of news must be unique");
+            }
             NewsModel newsModel = newsMapper.DTONewsToModel(updateRequest);
             newsModel.setId(id);
             return newsMapper.ModelNewsToDTO(newsRepository.update(newsModel));
@@ -104,31 +106,36 @@ public class NewsService implements NewsServiceInterface {
         }
     }
 
-@Override
+    @Override
     public List<NewsDtoResponse> readListOfNewsByParams(List<String> tagName, List<Long> tagId, String authorName, String title, String content) {
 
         return newsMapper.ModelListToDtoList(newsRepository.readListOfNewsByParams(tagName, tagId, authorName, title, content));
     }
 
-    public void createNotExistAuthor(String authorName){
-        if(authorName!=null && !authorName.equals("")){
-            if(authorName.length()<AUTHOR_NAME_MAX_LENGTH && authorName.length()>AUTHOR_NAME_MIN_LENGTH){
-            if(authorRepository.readAuthorByName(authorName).isEmpty()){
-                AuthorModel authorModel = new AuthorModel();
-                authorModel.setName(authorName);
-                authorRepository.create(authorModel);
-            }}
-            else {throw new ValidatorException(String.format(ErrorCodes.VALIDATION.getErrorMessage(), "Length of author`s name must be between 15 and 3"));
-        }
+    public void createNotExistAuthor(String authorName) {
+        if (authorName != null && !authorName.equals("")) {
+            if (authorName.length() < AUTHOR_NAME_MAX_LENGTH && authorName.length() > AUTHOR_NAME_MIN_LENGTH) {
+                if (authorRepository.readAuthorByName(authorName).isEmpty()) {
+                    AuthorModel authorModel = new AuthorModel();
+                    authorModel.setName(authorName);
+                    authorRepository.create(authorModel);
+                }
+            } else {
+                throw new ValidatorException(String.format(ErrorCodes.VALIDATION.getErrorMessage(), "Length of author`s name must be between 15 and 3"));
+            }
 
-    }}
-    public void createNotExistTags(List<String> tagNames){
+        }
+    }
+
+    public void createNotExistTags(List<String> tagNames) {
         tagNames.stream().filter(name -> tagRepository.readTagByName(name).isEmpty()).map(name -> {
-            if (name.length()> TAG_NAME_MIN_LENGTH && name.length()<TAG_NAME_MAX_LENGTH){
-            TagModel tagModel = new TagModel();
-            tagModel.setName(name);
-            return tagModel;}
-            else {throw new ValidatorException(String.format(ErrorCodes.VALIDATION.getErrorMessage(), "Length of tag`s name must be between 15 and 3"));}
+            if (name.length() > TAG_NAME_MIN_LENGTH && name.length() < TAG_NAME_MAX_LENGTH) {
+                TagModel tagModel = new TagModel();
+                tagModel.setName(name);
+                return tagModel;
+            } else {
+                throw new ValidatorException(String.format(ErrorCodes.VALIDATION.getErrorMessage(), "Length of tag`s name must be between 15 and 3"));
+            }
         }).forEach(tagRepository::create);
     }
 }

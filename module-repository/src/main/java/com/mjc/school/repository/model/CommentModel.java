@@ -14,26 +14,26 @@ import java.util.Objects;
 @Table(name = "comment")
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class CommentModel implements BaseEntity <Long>{
+public class CommentModel implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column(nullable = false, name = "content")
- private String content;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "news_id", nullable = false)
+    @JoinColumn(name = "news_id", nullable = false)
     private NewsModel newsModel;
 
     @CreatedDate
     @Column(name = "created")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"M/d/yy", "dd.MM.yyyy"})
     private LocalDateTime created;
     @LastModifiedDate
     @Column(name = "modified")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"M/d/yy", "dd.MM.yyyy"})
     private LocalDateTime modified;
 
 
@@ -48,7 +48,7 @@ public class CommentModel implements BaseEntity <Long>{
 
     @Override
     public void setId(Long id) {
-        this.id=id;
+        this.id = id;
 
     }
 

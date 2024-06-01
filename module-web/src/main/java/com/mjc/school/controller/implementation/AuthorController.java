@@ -47,7 +47,7 @@ public class AuthorController implements BaseController<AuthorDtoRequest, Author
     public List<AuthorDtoResponse> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "name,dsc" ) String sortBy) {
+            @RequestParam(value = "sortBy", required = false, defaultValue = "name,dsc") String sortBy) {
         return this.authorService.readAll(page, size, sortBy);
     }
 

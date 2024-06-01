@@ -63,32 +63,40 @@ public class AuthorModel implements BaseEntity<Long> {
     public void setId(Long id) {
         this.id = id;
     }
-public String getName() {
+
+    public String getName() {
         return name;
-}
-public void setName(String name) {
+    }
+
+    public void setName(String name) {
         this.name = name;
-}
-public LocalDateTime getCreateDate() {
+    }
+
+    public LocalDateTime getCreateDate() {
         return createDate;
-}
-public void setCreateDate(LocalDateTime createDate) {
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
-}
-public LocalDateTime getLastUpdateDate() {
+    }
+
+    public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
-}
-public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-}
-public List<NewsModel> getNewsModelListWithId() {
+    }
+
+    public List<NewsModel> getNewsModelListWithId() {
         return newsModelListWithId;
-}
-public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
+    }
+
+    public void setNewsModelListWithId(List<NewsModel> newsModelListWithId) {
         this.newsModelListWithId = newsModelListWithId;
 
 
-}
+    }
 
 
     public boolean equals(Object obj) {

@@ -48,8 +48,10 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
             ordered = select.orderBy(criteriaBuilder.desc(root.get(sort[0])));
         }
         TypedQuery<T> result = entityManager.createQuery(ordered).setFirstResult(page * size).setMaxResults(size);
-        try { return result.getResultList();}
-        catch (PersistenceException e){ throw new PersistenceException("Error reading entities from database", e);
+        try {
+            return result.getResultList();
+        } catch (PersistenceException e) {
+            throw new PersistenceException("Error reading entities from database", e);
 
         }
     }
@@ -70,9 +72,9 @@ public abstract class AbstractDBRepository<T extends BaseEntity<K>, K> implement
     @Override
     public T update(T entity) {
         T existingEntity = entityManager.find(entityClass, entity.getId());
-        update(existingEntity,entity);
-            entityManager.flush();
-          return existingEntity;
+        update(existingEntity, entity);
+        entityManager.flush();
+        return existingEntity;
     }
 
     @Override

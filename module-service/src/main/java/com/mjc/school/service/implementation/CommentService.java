@@ -37,18 +37,19 @@ public class CommentService implements CommentServiceInterface {
     public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, NewsRepository newsRepository, CustomValidator customValidator) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
-        this.newsRepository=newsRepository;
+        this.newsRepository = newsRepository;
         this.customValidator = customValidator;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CommentDtoResponse> readAll(int page, int size, String sortBy) {
-      try{  return commentMapper.listModelToDtoList(commentRepository.readAll(page, size, sortBy));
+        try {
+            return commentMapper.listModelToDtoList(commentRepository.readAll(page, size, sortBy));
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
+        }
     }
-      catch (InvalidDataAccessApiUsageException e) {
-          throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
-      }}
 
     @Override
     @Transactional(readOnly = true)
@@ -79,7 +80,7 @@ public class CommentService implements CommentServiceInterface {
             commentModel.setId(id);
             return commentMapper.ModelCommentToDto(commentRepository.update(commentModel));
         } else {
-            throw new ElementNotFoundException(String.format(NO_COMMENT_WITH_PROVIDED_ID.getErrorMessage(),id));
+            throw new ElementNotFoundException(String.format(NO_COMMENT_WITH_PROVIDED_ID.getErrorMessage(), id));
         }
     }
 
@@ -93,9 +94,9 @@ public class CommentService implements CommentServiceInterface {
         }
     }
 
-@Override
+    @Override
     public List<CommentDtoResponse> readListOfCommentsByNewsId(Long newsId) {
-        if (newsId != null && newsId>=0) {
+        if (newsId != null && newsId >= 0) {
             return commentMapper.listModelToDtoList(commentRepository.readListOfCommentsByNewsId(newsId));
         } else {
             throw new ElementNotFoundException(String.format(NO_COMMENTS_FOR_NEWS_ID.getErrorMessage(), newsId));

@@ -1,4 +1,5 @@
 package com.mjc.school.controller;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,14 +12,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
-@ComponentScan(value = {"com.mjc.school", "com.mjc.school.repository", "com.mjc.school.service", "com.mjc.school.controller" })
+@ComponentScan(value = {"com.mjc.school", "com.mjc.school.repository", "com.mjc.school.service", "com.mjc.school.controller"})
 @EntityScan(basePackages = {"com.mjc.school.repository"})
 @EnableWebMvc
 @EnableSwagger2
 @EnableJpaAuditing
 @EnableTransactionManagement
 public class Main {
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
 
     }

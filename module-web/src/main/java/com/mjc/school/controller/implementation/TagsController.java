@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api/v1/tag", produces ="application/json")
-@Api( value = "Tags", description = "Operations for creating, updating, retrieving and deleting tag in the application")
+@RequestMapping(value = "api/v1/tag", produces = "application/json")
+@Api(value = "Tags", description = "Operations for creating, updating, retrieving and deleting tag in the application")
 public class TagsController implements BaseController<TagDtoRequest, TagDtoResponse, Long> {
     private TagServiceInterface tagsService;
 
@@ -57,7 +57,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public EntityModel<TagDtoResponse> readById(@CommandParam("tagId") @PathVariable Long id) {
-       EntityModel<TagDtoResponse> model = EntityModel.of(tagsService.readById(id));
+        EntityModel<TagDtoResponse> model = EntityModel.of(tagsService.readById(id));
         LinkHelper.addLinkToTags(model);
         return model;
     }
@@ -81,7 +81,7 @@ public class TagsController implements BaseController<TagDtoRequest, TagDtoRespo
     @Override
     @PutMapping(value = "/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Update a tag", response =TagDtoResponse.class)
+    @ApiOperation(value = "Update a tag", response = TagDtoResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully updated a tag"),
             @ApiResponse(code = 400, message = "Invalid request from the client"),

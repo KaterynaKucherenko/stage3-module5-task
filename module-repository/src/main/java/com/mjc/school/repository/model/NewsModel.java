@@ -22,8 +22,8 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(nullable = false, name = "title" , unique = true)
-   private String title;
+    @Column(nullable = false, name = "title", unique = true)
+    private String title;
     @Column(nullable = false, name = "content")
     private String content;
     @CreatedDate
@@ -33,7 +33,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     @Column(name = "lastUpdateDate")
     private LocalDateTime lastUpdateDate;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private AuthorModel authorModel;
 
@@ -119,7 +119,7 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     }
 
     public String toString() {
-        return "news ID: " + id + ", title: " + title + ", content: " + content + ", create date: " + createDate + ", last update date: " + lastUpdateDate ;
+        return "news ID: " + id + ", title: " + title + ", content: " + content + ", create date: " + createDate + ", last update date: " + lastUpdateDate;
     }
 
 
@@ -146,7 +146,8 @@ public class NewsModel implements BaseEntity<Long>, Serializable {
     public void setComments(List<CommentModel> comments) {
         this.comments = comments;
     }
-    public void addComment(CommentModel commentModel){
+
+    public void addComment(CommentModel commentModel) {
         comments.add(commentModel);
     }
 }

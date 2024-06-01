@@ -11,7 +11,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public abstract class NewsMapper {
 
     @Mapping(source = "tags", target = "tagList")
     @Mapping(source = "comments", target = "commentList")
-    @Mapping( target = "authorDtoResponse", source = "authorModel")
+    @Mapping(target = "authorDtoResponse", source = "authorModel")
     @Mapping(target = "createDate", expression = "java(newsModel.getCreateDate().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
     @Mapping(target = "lastUpdateDate", expression = "java(newsModel.getLastUpdateDate().format(java.time.format.DateTimeFormatter.ISO_DATE_TIME))")
     public abstract NewsDtoResponse ModelNewsToDTO(NewsModel newsModel);

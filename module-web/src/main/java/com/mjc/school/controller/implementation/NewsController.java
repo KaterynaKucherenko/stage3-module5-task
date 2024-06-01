@@ -10,14 +10,11 @@ import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.interfaces.TagServiceInterface;
 import io.swagger.annotations.*;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/v1/news", produces = "application/json")
@@ -126,13 +123,13 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public List<NewsDtoResponse> readListOfNewsByParams(
-            @RequestParam(name = "tag_name",  required = false) List<String> tagName,
-            @RequestParam(name = "tag_id",  required = false)
+            @RequestParam(name = "tag_name", required = false) List<String> tagName,
+            @RequestParam(name = "tag_id", required = false)
             @ApiParam(type = "Long", format = "int64")
             List<Long> tagId,
-            @RequestParam(name = "author_name",  required = false) String authorName,
-            @RequestParam(name = "title",  required = false) String title,
-            @RequestParam(name = "content",  required = false) String content) {
+            @RequestParam(name = "author_name", required = false) String authorName,
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "content", required = false) String content) {
         return newsService.readListOfNewsByParams(tagName, tagId, authorName, title, content);
     }
 
@@ -145,9 +142,9 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public List<EntityModel<TagDtoResponse>> readListOfTagsByNewsId(@PathVariable  Long newsId) {
+    public List<EntityModel<TagDtoResponse>> readListOfTagsByNewsId(@PathVariable Long newsId) {
         List<EntityModel<TagDtoResponse>> tagModels = tagService.readListOfTagsByNewsId(newsId).stream().map(EntityModel::of).toList();
-       tagModels.forEach(LinkHelper::addLinkToTags);
+        tagModels.forEach(LinkHelper::addLinkToTags);
         return tagModels;
 
     }
@@ -167,6 +164,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
         LinkHelper.addLinkToAuthors(model);
         return model;
     }
+
     @GetMapping(value = "/{newsId:\\d+}/comment")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get comments of provided news", response = List.class)

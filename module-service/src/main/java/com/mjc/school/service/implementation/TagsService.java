@@ -36,11 +36,12 @@ public class TagsService implements TagServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public List<TagDtoResponse> readAll(int page, int size, String sortBy) {
-       try{ return tagMapper.listModelToDtoList(tagsRepository.readAll(page, size, sortBy));
+        try {
+            return tagMapper.listModelToDtoList(tagsRepository.readAll(page, size, sortBy));
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
+        }
     }
-       catch (InvalidDataAccessApiUsageException e) {
-           throw new ValidatorException(String.format(INVALID_VALUE_OF_SORTING.getErrorMessage()));
-       }}
 
     @Override
     @Transactional(readOnly = true)
@@ -54,8 +55,9 @@ public class TagsService implements TagServiceInterface {
     @Transactional
     public TagDtoResponse create(TagDtoRequest createRequest) {
         customValidator.validateTag(createRequest);
-        if(tagsRepository.readTagByName(createRequest.name()).isPresent()) {
-            throw new ValidatorException("Name of tag must be unique");}
+        if (tagsRepository.readTagByName(createRequest.name()).isPresent()) {
+            throw new ValidatorException("Name of tag must be unique");
+        }
         TagModel tagModel = tagMapper.DtoTagsToModel(createRequest);
         return tagMapper.ModelTagsToDto(tagsRepository.create(tagModel));
     }
@@ -65,8 +67,9 @@ public class TagsService implements TagServiceInterface {
     public TagDtoResponse update(Long id, TagDtoRequest updateRequest) {
         if (tagsRepository.existById(id)) {
             customValidator.validateTag(updateRequest);
-            if(tagsRepository.readTagByName(updateRequest.name()).isPresent()) {
-                throw new ValidatorException("Name of tag must be unique");}
+            if (tagsRepository.readTagByName(updateRequest.name()).isPresent()) {
+                throw new ValidatorException("Name of tag must be unique");
+            }
             TagModel tagModel = tagMapper.DtoTagsToModel(updateRequest);
             tagModel.setId(id);
             return tagMapper.ModelTagsToDto(tagsRepository.update(tagModel));

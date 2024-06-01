@@ -1,7 +1,7 @@
 package com.mjc.school.service.exceptions;
 
 public enum ErrorCodes {
-NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
+    NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
     NO_AUTHOR_WITH_PROVIDED_ID("40402", "Author with this id: %d does not exist."),
     NO_TAG_WITH_PROVIDED_ID("40403", "Tag with this id: %d does not exist."),
     NO_COMMENT_WITH_PROVIDED_ID("40404", "Comment with this id: %d does not exist."),
@@ -14,13 +14,14 @@ NO_NEWS_WITH_PROVIDED_ID("40401", "News with this id: %d does not exist."),
     NOT_UNIQUE_AUTHOR_NAME("0000", "Name of author does not unique.");
 
 
-private final String errorMessage;
+    private final String errorMessage;
 
-ErrorCodes (String errorCode, String errMessage){
-    this.errorMessage="errorMessage: " + errMessage+",  errorCode: " + errorCode;
-}
-public String getErrorMessage(){
-    return errorMessage;
-}
+    ErrorCodes(String errorCode, String errMessage) {
+        this.errorMessage = "errorMessage: " + errMessage + ",  errorCode: " + errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
 }

@@ -8,5 +8,5 @@ import com.mjc.school.service.dto.TagDtoResponse;
 import java.util.List;
 
 public interface TagServiceInterface extends BaseService<TagDtoRequest, TagDtoResponse, Long> {
-    List<TagDtoResponse> readListOfTagsByNewsId (Long newsId);
+    List<TagDtoResponse> readListOfTagsByNewsId(Long newsId);
 }
