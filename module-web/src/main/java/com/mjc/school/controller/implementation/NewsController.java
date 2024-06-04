@@ -117,7 +117,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get news with provided parameters", response = List.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Successfully fetched news with provided parameters"),
+            @ApiResponse(code = 200, message = "Successfully fetched news with provided parameters"),
             @ApiResponse(code = 400, message = "Invalid request from the client"),
             @ApiResponse(code = 404, message = "Resource is not found"),
             @ApiResponse(code = 500, message = "Internal server error")
