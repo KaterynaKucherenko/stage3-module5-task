@@ -15,6 +15,7 @@ import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.mapper.NewsMapper;
 import com.mjc.school.service.validation.CustomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,19 +81,21 @@ public class NewsService implements NewsServiceInterface {
     @Override
     @Transactional
     public NewsDtoResponse update(Long id, NewsDtoRequest updateRequest) {
+        try{
         if (newsRepository.existById(id)) {
             customValidator.validateNews(updateRequest);
             createNotExistAuthor(updateRequest.authorName());
             createNotExistTags(updateRequest.tagNames());
-            if (newsRepository.readNewsByTitle(updateRequest.title()).isPresent()) {
-                throw new ValidatorException("Title of news must be unique");
-            }
             NewsModel newsModel = newsMapper.DTONewsToModel(updateRequest);
             newsModel.setId(id);
             return newsMapper.ModelNewsToDTO(newsRepository.update(newsModel));
         } else {
             throw new ElementNotFoundException(String.format(NO_NEWS_WITH_PROVIDED_ID.getErrorMessage(), id));
+        }}
+        catch (DataIntegrityViolationException e){
+            throw new ValidatorException("Title of news must be unique");
         }
+
 
     }
 
