@@ -1,18 +1,35 @@
 package com.mjc.school.controller.implementation;
 
 
-import com.mjc.school.controller.BaseController;
+import com.mjc.school.controller.baseControllerInterface.BaseController;
 import com.mjc.school.controller.annotation.CommandParam;
 import com.mjc.school.controller.hateoas.LinkHelper;
-import com.mjc.school.service.dto.*;
+import com.mjc.school.service.dto.AuthorDtoResponse;
+import com.mjc.school.service.dto.CommentDtoResponse;
+import com.mjc.school.service.dto.NewsDtoRequest;
+import com.mjc.school.service.dto.NewsDtoResponse;
+import com.mjc.school.service.dto.TagDtoResponse;
 import com.mjc.school.service.interfaces.AuthorServiceInterface;
 import com.mjc.school.service.interfaces.CommentServiceInterface;
 import com.mjc.school.service.interfaces.NewsServiceInterface;
 import com.mjc.school.service.interfaces.TagServiceInterface;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

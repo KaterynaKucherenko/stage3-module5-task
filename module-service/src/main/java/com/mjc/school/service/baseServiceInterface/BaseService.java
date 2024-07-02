@@ -1,4 +1,4 @@
-package com.mjc.school.service;
+package com.mjc.school.service.baseServiceInterface;
 
 import java.util.List;
 

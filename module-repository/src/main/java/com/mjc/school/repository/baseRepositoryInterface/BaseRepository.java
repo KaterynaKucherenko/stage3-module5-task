@@ -1,7 +1,6 @@
-package com.mjc.school.repository;
+package com.mjc.school.repository.baseRepositoryInterface;
 
 import com.mjc.school.repository.model.BaseEntity;
-import org.springframework.data.domain.Page;
 
 
 import java.util.List;

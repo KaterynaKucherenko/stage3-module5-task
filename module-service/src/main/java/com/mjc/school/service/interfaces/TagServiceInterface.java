@@ -1,6 +1,6 @@
 package com.mjc.school.service.interfaces;
 
-import com.mjc.school.service.BaseService;
+import com.mjc.school.service.baseServiceInterface.BaseService;
 
 import com.mjc.school.service.dto.TagDtoRequest;
 import com.mjc.school.service.dto.TagDtoResponse;
