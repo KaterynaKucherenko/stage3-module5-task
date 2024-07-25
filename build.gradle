@@ -1,6 +1,24 @@
 plugins {
     id 'java-base'
 }
+plugins {
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.6"
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
 
 wrapper {
     gradleVersion = gradlewVersion
